@@ -5,6 +5,6 @@ timm
 numpy
 pandas
 pillow
-opencv-python
+opencv-python-headless
 matplotlib
 grad-cam
