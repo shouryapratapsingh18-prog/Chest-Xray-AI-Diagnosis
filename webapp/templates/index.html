@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chest X-ray AI Diagnosis Assistant</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Chest X-ray AI Diagnosis Assistant</h1>
+    <p class="subtitle">EfficientNetV2 + Swin-Small Hybrid &middot; Test-Time Augmentation &middot; Grad-CAM Explainability</p>
+  </header>
+
+  {% if not weights_ready %}
+  <div class="banner warning">
+    ⚠️ No trained weights found at <code>webapp/weights/best_model.pth</code>.
+    Train the model on Kaggle using <code>kaggle_train/train_notebook.ipynb</code>,
+    download <code>best_model.pth</code>, and place it in that folder before predicting.
+  </div>
+  {% endif %}
+
+  <main>
+    <section class="upload-card">
+      <form id="upload-form">
+        <label for="image-input" class="dropzone" id="dropzone">
+          <span id="dropzone-text">Click or drag a chest X-ray image here</span>
+          <img id="preview-img" src="" alt="" style="display:none;">
+        </label>
+        <input type="file" id="image-input" name="image" accept="image/*" hidden>
+        <button type="submit" id="analyze-btn">Analyze X-ray</button>
+      </form>
+      <div id="status"></div>
+    </section>
+
+    <section id="results" class="results-card" style="display:none;">
+      <h2>Prediction</h2>
+      <div class="top-prediction">
+        <span id="top-label"></span>
+        <span id="top-prob" class="badge"></span>
+      </div>
+
+      <div class="images-row">
+        <div class="image-col">
+          <h3>Original</h3>
+          <img id="orig-img" src="">
+        </div>
+        <div class="image-col">
+          <h3>Heatmap (Grad-CAM)</h3>
+          <img id="heatmap-img" src="">
+        </div>
+        <div class="image-col">
+          <h3>Region highlighted (arrow)</h3>
+          <img id="arrow-img" src="">
+        </div>
+      </div>
+
+      <h3>All class probabilities</h3>
+      <div id="report-bars"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Not a medical device. For research / educational demonstration only — always consult a radiologist.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
